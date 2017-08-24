@@ -5,23 +5,22 @@ const Schema = mongoose.Schema;
 
 const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, lowercase: true, required: true },
-  passwordHash: { type: String, required: true }
-  // name: {type: String},
-  // email: String,
-  // university: String,
-  // job: String,
-  // comapny: String,
-  // skills: [String],
-  // phone: Number,
-  // address:{
-  //   street_num: Number,
-  //   Street_name: String,
-  //   city:
-  //   state_or_province:
-  //   postal_code: Number,
-  //   country: String,
-  // }
-
+  passwordHash: { type: String, required: true },
+  name: {type: String},
+  email: String,
+  university: String,
+  job: String,
+  comapny: String,
+  skills: [String],
+  phone: Number,
+  address:{
+    street_num: Number,
+    Street_name: String,
+    city: String,
+    state_or_province: String,
+    postal_code: Number,
+    country: String,
+  }
 });
 
 userSchema.virtual('password')

@@ -10,19 +10,19 @@ mongoose.connect("mongodb://localhost:27017/robots");
 // let db;
 //
 // let data = [];
-const getListings = function(req, res, next){
-  User.find({}).sort("name")
-  .then(function(users){
-    console.log(users);
-    req.session.users = users;
-    next();
-  })
-  .catch(function(err){
-    console.log(err);
-    next(err);
-  })
-
-}
+// const getListings = function(req, res, next){
+//   User.find({}).sort("name")
+//   .then(function(users){
+//     console.log(users);
+//     req.session.users = users;
+//     next();
+//   })
+//   .catch(function(err){
+//     console.log(err);
+//     next(err);
+//   })
+//
+// }
 //
 // let getData = function(db, callback) {
 //   let users = db.collection('users');
@@ -42,11 +42,54 @@ const getListings = function(req, res, next){
 
 
 
-router.get('/',  getListings, function(req, res){
+router.get('/', function(req, res){
 
-  res.render("index", {users: req.session.users})
+    User.find({}).sort("name")
+    .then(function(users){
+     console.log(users);
+     req.session.users = users;
+     res.render("index", {users: req.session.users})
+      next();
+    })
+    .catch(function(err){
+      console.log(err);
+      next(err);
+    })
+  }
+);
+
+router.get('/listing/:id', function(req, res){
+  let id = req.params.id
+  let user = User.find(function(user){
+  return user.id == id;
+
+})
+res.render("page", user)
+
 });
 
+router.post('/EditProfile', function(res, req){
+
+  User.create({
+    username:
+    passwordHash:
+    name:
+    email:
+    university:
+    job:
+    comapny:
+    skills:
+    phone:
+    address:{
+      street_num:
+      Street_name:
+      city:
+      state_or_province:
+      postal_code:
+      country:
+    }
+  })
+})
 
 
 const requireLogin = function (req, res, next) {
