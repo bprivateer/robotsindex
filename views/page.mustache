@@ -1,1 +1,38 @@
 <p>you got the page to show up!</p>
+
+{{name}}
+{{email}}
+{{university}}
+{{job}}
+{{company}}
+{{#skills}}
+{{.}}
+{{/skills}}
+{{phone}}
+{{#address}}
+{{street_num}}
+{{street_name}}
+{{city}}
+{{state_or_province}}
+{{postal_code}}
+{{country}}
+{{/address}}
+
+
+
+username: { type: String, unique: true, lowercase: true, required: true },
+passwordHash: { type: String, required: true },
+name: {type: String},
+email: String,
+university: String,
+job: String,
+comapny: String,
+skills: [String],
+phone: String,
+address:{
+  street_num: String,
+  Street_name: String,
+  city: String,
+  state_or_province: String,
+  postal_code: Number,
+  country: String,

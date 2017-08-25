@@ -5,8 +5,6 @@ const mongoose = require("mongoose");
 const passport = require('passport');
 
 mongoose.connect("mongodb://localhost:27017/robots");
-
-
 // let db;
 //
 // let data = [];
@@ -38,7 +36,12 @@ mongoose.connect("mongodb://localhost:27017/robots");
 //       db.close();
 //       next();
 //     });
-
+router.get('/index', function(req, res){
+  User.find({})
+  .then(function(users) {
+  res.render("index", {users: users})
+})
+});
 
 
 
@@ -48,7 +51,7 @@ router.get('/', function(req, res){
     .then(function(users){
      console.log(users);
      req.session.users = users;
-     res.render("index", {users: req.session.users})
+     res.render("login", {users: req.session.users})
       next();
     })
     .catch(function(err){
@@ -57,39 +60,52 @@ router.get('/', function(req, res){
     })
   }
 );
+//
+// router.get('/listing/:id', function(req, res){
+//   let id = req.params.id
+//   let user = User.find(function(user){
+//   return user.id == id;
+//
+// })
+// res.render("page", user)
+//
+// });
 
-router.get('/listing/:id', function(req, res){
-  let id = req.params.id
-  let user = User.find(function(user){
-  return user.id == id;
+router.post('/login', function(req, res){
 
-})
-res.render("page", user)
+  res.redirect("/index")
+});
+
+
+router.post('/signup', function(req, res){
+  User.create({
+    username: req.body.username,
+    passwordHash: req.body.password,
+    name: req.body.name,
+    email: req.body.email,
+    university: req.body.university,
+    job: req.body.job,
+    company: req.body.company,
+    skills: req.body.skills,
+    phone: req.body.phone,
+    address:{
+      street_num: req.body.streetNum,
+      Street_name: req.body.streetName,
+      city: req.body.city,
+      state_or_province: req.body.state,
+      postal_code: req.body.zipCode,
+      country: req.body.country,
+    }
+  })
+  .then(function(data){
+    console.log(data);
+  })
+
+  res.redirect('/index')
+
 
 });
 
-router.post('/EditProfile', function(res, req){
-
-  User.create({
-    username:
-    passwordHash:
-    name:
-    email:
-    university:
-    job:
-    comapny:
-    skills:
-    phone:
-    address:{
-      street_num:
-      Street_name:
-      city:
-      state_or_province:
-      postal_code:
-      country:
-    }
-  })
-})
 
 
 const requireLogin = function (req, res, next) {
@@ -126,6 +142,45 @@ router.post('/', passport.authenticate('local', {
 router.get("/signup", function(req, res) {
   res.render("signup");
 });
+
+router.post("/edit/:{{id}}", function(req, res){
+  req.user.update({
+    username: req.body.username,
+    passwordHash: req.body.password,
+    name: req.body.name,
+    email: req.body.email,
+    university: req.body.university,
+    job: req.body.job,
+    company: req.body.company,
+    skills: req.body.skills,
+    phone: req.body.phone,
+    address:{
+      street_num: req.body.streetNum,
+      Street_name: req.body.streetName,
+      city: req.body.city,
+      state_or_province: req.body.state,
+      postal_code: req.body.zipCode,
+      country: req.body.country,
+    }
+
+
+  }).then(function(data){
+    console.log("catch");
+    console.log(req.user);
+  })
+  .catch(function(err) {
+    console.log(err);
+  })
+
+  res.redirect("/")
+});
+
+router.get("/edit/:id", function(req, res){
+
+  res.render("editprofile")
+})
+
+
 
 router.post("/signup", function(req, res) {
   User.create({

@@ -12,9 +12,9 @@ const userSchema = new mongoose.Schema({
   job: String,
   comapny: String,
   skills: [String],
-  phone: Number,
+  phone: String,
   address:{
-    street_num: Number,
+    street_num: String,
     Street_name: String,
     city: String,
     state_or_province: String,
