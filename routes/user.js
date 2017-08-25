@@ -36,11 +36,23 @@ mongoose.connect("mongodb://localhost:27017/robots");
 //       db.close();
 //       next();
 //     });
+// 
+// router.get('/page', function(res, req){
+//
+//   User.find({})
+//   .then(function(data){
+//     console.log(data);
+//   })
+//
+//   res.rednder("page", data)
+// })
+
+
 router.get('/index', function(req, res){
   User.find({})
   .then(function(users) {
-  res.render("index", {users: users})
-})
+    res.render("index", {users: users})
+  });
 });
 
 
@@ -52,11 +64,11 @@ router.get('/', function(req, res){
      console.log(users);
      req.session.users = users;
      res.render("login", {users: req.session.users})
-      next();
+      // next();
     })
     .catch(function(err){
       console.log(err);
-      next(err);
+      // next(err);
     })
   }
 );
@@ -72,7 +84,6 @@ router.get('/', function(req, res){
 // });
 
 router.post('/login', function(req, res){
-
   res.redirect("/index")
 });
 
@@ -99,9 +110,9 @@ router.post('/signup', function(req, res){
   })
   .then(function(data){
     console.log(data);
+    res.redirect('/index')
   })
 
-  res.redirect('/index')
 
 
 });
@@ -143,42 +154,59 @@ router.get("/signup", function(req, res) {
   res.render("signup");
 });
 
-router.post("/edit/:{{id}}", function(req, res){
-  req.user.update({
-    username: req.body.username,
-    passwordHash: req.body.password,
-    name: req.body.name,
-    email: req.body.email,
-    university: req.body.university,
-    job: req.body.job,
-    company: req.body.company,
-    skills: req.body.skills,
-    phone: req.body.phone,
-    address:{
-      street_num: req.body.streetNum,
-      Street_name: req.body.streetName,
-      city: req.body.city,
-      state_or_province: req.body.state,
-      postal_code: req.body.zipCode,
-      country: req.body.country,
-    }
-
-
-  }).then(function(data){
-    console.log("catch");
-    console.log(req.user);
-  })
-  .catch(function(err) {
-    console.log(err);
-  })
-
-  res.redirect("/")
-});
+// router.post("/edit/:id", function(req, res){
+//  let id = req.params.id;
+//
+//   User.update({'_id': id},{
+//     username: req.body.username,
+//     passwordHash: req.body.password,
+//     name: req.body.name,
+//     email: req.body.email,
+//     university: req.body.university,
+//     job: req.body.job,
+//     company: req.body.company,
+//     skills: req.body.skills,
+//     phone: req.body.phone,
+//     address:{
+//       street_num: req.body.streetNum,
+//       Street_name: req.body.streetName,
+//       city: req.body.city,
+//       state_or_province: req.body.state,
+//       postal_code: req.body.zipCode,
+//       country: req.body.country,
+//     }
+//   }).then(function(data){
+//     console.log("catch");
+//     console.log(req.user);
+//     res.redirect("/")
+//   })
+//   .catch(function(err) {
+//     console.log(err);
+//   })
+//
+//
+// });
 
 router.get("/edit/:id", function(req, res){
+  console.log('PARAMS',req.params);
+  // id = req.params.id;
+  // console.log('ID HERE',id);
+  console.log("hahahahahahahahah", req.params.idr);
+  User.findOne({_id: req.params.id})
+    .then(function(user) {
+      console.log('USER HERE:',user);
+      res.render('editprofile', user);
+    })
 
-  res.render("editprofile")
-})
+  // User.find({_id: id})
+  // .then(function(data){
+  //   console.log(data);
+  //   res.render("editprofile", data[0])
+  // })
+  // .catch(function(err){
+  //   console.log(err);
+  // })
+});
 
 
 

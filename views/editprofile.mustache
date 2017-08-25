@@ -1,22 +1,32 @@
-<div class="editProfile">
-  <form class="" action="/edit:{{id}}" method="post">
-    <input type="text" name="username" value="" placeholder="username">
-    <input type="password" name="password" value="" placeholder="password">
-    <input type="text" name="name" value="" placeholder="name">
-    <input type="text" name="email" value="" placeholder="email">
-    <input type="text" name="university" value="" placeholder="university">
-    <input type="text" name="job" value="" placeholder="job">
-    <input type="text" name="company" value="" placeholder="company">
-    <input type="text" name="skills" value="" placeholder="skills">
-    <input type="text" name="phone" value="" placeholder="phone">
-    <p>Address</p>
-    <input type="text" name="streetNum" value="" placeholder="street">
-    <input type="text" name="" value="s" placeholder="street-name">
-    <input type="text" name="state" value="" placeholder="state">
-    <input type="text" name="city" value="" placeholder="city">
-    <input type="text" name="zip" value="" placeholder="zipCode">
-    <input type="text" name="country" value="" placeholder="country">
-    <button type="submit" name="button">Edit</button>
-  </form>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div class="editProfile">
+      <form class="" action="/edit/{{_id}}" method="post">
+        <input type="text" name="username" value="{{username}}" placeholder="username">
+        <input type="password" name="password" value="{{password}}" placeholder="password">
+        <input type="text" name="name" value="{{name}}" placeholder="name">
+        <input type="text" name="email" value="{{email}}" placeholder="email">
+        <input type="text" name="university" value="{{university}}" placeholder="university">
+        <input type="text" name="job" value="{{job}}" placeholder="job">
+        <input type="text" name="company" value="{{company}}" placeholder="company">
+        <input type="text" name="skills" value="{{skills}}" placeholder="skills">
+        <input type="text" name="phone" value="{{phone}}" placeholder="phone">
+        <p>Address</p>
+        <input type="text" name="streetNum" value="{{street}}" placeholder="street">
+        <input type="text" name="" value="{{street-name}}" placeholder="street-name">
+        <input type="text" name="state" value="{{state}}" placeholder="state">
+        <input type="text" name="city" value="{{city}}" placeholder="city">
+        <input type="text" name="zip" value="{{zipCode}}" placeholder="zipCode">
+        <input type="text" name="country" value="{{country}}" placeholder="country">
+        <button type="submit" name="button">Edit</button>
+      </form>
 
-</div>
+    </div>
+    
+  </body>
+</html>

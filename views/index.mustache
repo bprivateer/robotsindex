@@ -7,11 +7,17 @@
   <h2>{{name}}</h2>
   <h3>{{username}}</h3><br>
   <img src="{{avatar}}"><br>
-  <a href="/edit/:{{id}}">   {{#job}}
-                {{job}}
-                {{/job}}
-                {{^job}}Avaliable for hire
-                {{/job}}</a><br>
+  <!-- <a href="/edit/{{_id}}"> -->
+  <a href="/edit/{{_id}}">
+
+    {{#job}}
+    {{job}}
+    {{/job}}
+    {{^job}}
+      Avaliable for hire
+    {{/job}}
+  </a>
+  <br>
 </div>
 {{/users}}
 </div>
