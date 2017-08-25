@@ -5,10 +5,31 @@
     <title></title>
   </head>
   <body>
+<br>
+<br>
+<p>you got the page to show up!</p>
+
+{{name}}<br>
+{{email}}<br>
+{{university}}<br>
+{{job}}<br>
+{{company}}<br>
+{{#skills}}
+{{.}}<br>
+{{/skills}}
+{{phone}}<br>
+{{#address}}
+{{street_num}}<br>
+{{street_name}}<br>
+{{city}}<br>
+{{state_or_province}}<br>
+{{postal_code}}<br>
+{{country}}<br>
+{{/address}}
+
     <div class="editProfile">
       <form class="" action="/edit/{{_id}}" method="post">
         <input type="text" name="username" value="{{username}}" placeholder="username">
-        <input type="password" name="password" value="{{password}}" placeholder="password">
         <input type="text" name="name" value="{{name}}" placeholder="name">
         <input type="text" name="email" value="{{email}}" placeholder="email">
         <input type="text" name="university" value="{{university}}" placeholder="university">
@@ -18,7 +39,7 @@
         <input type="text" name="phone" value="{{phone}}" placeholder="phone">
         <p>Address</p>
         <input type="text" name="streetNum" value="{{street}}" placeholder="street">
-        <input type="text" name="" value="{{street-name}}" placeholder="street-name">
+        <input type="text" name="streetName" value="{{street-name}}" placeholder="street-name">
         <input type="text" name="state" value="{{state}}" placeholder="state">
         <input type="text" name="city" value="{{city}}" placeholder="city">
         <input type="text" name="zip" value="{{zipCode}}" placeholder="zipCode">
@@ -27,6 +48,6 @@
       </form>
 
     </div>
-    
+
   </body>
 </html>

@@ -4,6 +4,24 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require('passport');
 
+const requireLogin = function (req, res, next) {
+  if (req.user) {
+    console.log(req.user)
+    next()
+  } else {
+    res.redirect('/');
+  }
+};
+
+const login = function (req, res, next) {
+  if (req.user) {
+    res.redirect("/index")
+  } else {
+    console.log("Login");
+    next();
+  }
+};
+
 mongoose.connect("mongodb://localhost:27017/robots");
 // let db;
 //
@@ -36,7 +54,7 @@ mongoose.connect("mongodb://localhost:27017/robots");
 //       db.close();
 //       next();
 //     });
-// 
+//
 // router.get('/page', function(res, req){
 //
 //   User.find({})
@@ -47,51 +65,17 @@ mongoose.connect("mongodb://localhost:27017/robots");
 //   res.rednder("page", data)
 // })
 
-
-router.get('/index', function(req, res){
+router.get('/index', requireLogin, function(req, res){
   User.find({})
   .then(function(users) {
     res.render("index", {users: users})
   });
 });
 
-
-
-router.get('/', function(req, res){
-
-    User.find({}).sort("name")
-    .then(function(users){
-     console.log(users);
-     req.session.users = users;
-     res.render("login", {users: req.session.users})
-      // next();
-    })
-    .catch(function(err){
-      console.log(err);
-      // next(err);
-    })
-  }
-);
-//
-// router.get('/listing/:id', function(req, res){
-//   let id = req.params.id
-//   let user = User.find(function(user){
-//   return user.id == id;
-//
-// })
-// res.render("page", user)
-//
-// });
-
-router.post('/login', function(req, res){
-  res.redirect("/index")
-});
-
-
 router.post('/signup', function(req, res){
   User.create({
     username: req.body.username,
-    passwordHash: req.body.password,
+    password: req.body.password,
     name: req.body.name,
     email: req.body.email,
     university: req.body.university,
@@ -109,32 +93,11 @@ router.post('/signup', function(req, res){
     }
   })
   .then(function(data){
-    console.log(data);
-    res.redirect('/index')
+    // console.log(data);
+    res.redirect('/login')
   })
 
-
-
 });
-
-
-
-const requireLogin = function (req, res, next) {
-  if (req.user) {
-    console.log(req.user)
-    next()
-  } else {
-    res.redirect('/');
-  }
-};
-
-const login = function (req, res, next) {
-  if (req.user) {
-    res.redirect("/user")
-  } else {
-    next();
-  }
-};
 
 router.get("/", login, function(req, res) {
 
@@ -144,9 +107,15 @@ router.get("/", login, function(req, res) {
   });
 });
 
-router.post('/', passport.authenticate('local', {
-    successRedirect: '/user',
-    failureRedirect: '/',
+router.get('/login', function(req, res){
+  console.log(req.user);
+     res.render("login")
+    })
+
+
+router.post('/login', passport.authenticate('local', {
+    successRedirect: '/index',
+    failureRedirect: '/login',
     failureFlash: true
 }));
 
@@ -154,83 +123,78 @@ router.get("/signup", function(req, res) {
   res.render("signup");
 });
 
-// router.post("/edit/:id", function(req, res){
-//  let id = req.params.id;
-//
-//   User.update({'_id': id},{
+// router.post("/signup", login, function(req, res) {
+//   User.create({
 //     username: req.body.username,
-//     passwordHash: req.body.password,
-//     name: req.body.name,
-//     email: req.body.email,
-//     university: req.body.university,
-//     job: req.body.job,
-//     company: req.body.company,
-//     skills: req.body.skills,
-//     phone: req.body.phone,
-//     address:{
-//       street_num: req.body.streetNum,
-//       Street_name: req.body.streetName,
-//       city: req.body.city,
-//       state_or_province: req.body.state,
-//       postal_code: req.body.zipCode,
-//       country: req.body.country,
-//     }
-//   }).then(function(data){
-//     console.log("catch");
-//     console.log(req.user);
-//     res.redirect("/")
+//     password: req.body.password
+//   }).then(function(data) {
+//     // console.log(data);
+//     res.redirect("/login");
 //   })
 //   .catch(function(err) {
 //     console.log(err);
-//   })
-//
-//
+//     res.redirect("/index");
+//   });
 // });
 
-router.get("/edit/:id", function(req, res){
-  console.log('PARAMS',req.params);
-  // id = req.params.id;
-  // console.log('ID HERE',id);
-  console.log("hahahahahahahahah", req.params.idr);
-  User.findOne({_id: req.params.id})
-    .then(function(user) {
-      console.log('USER HERE:',user);
-      res.render('editprofile', user);
-    })
+router.post("/edit/:id", function(req, res){
+ let id = req.params.id;
 
-  // User.find({_id: id})
-  // .then(function(data){
-  //   console.log(data);
-  //   res.render("editprofile", data[0])
-  // })
-  // .catch(function(err){
-  //   console.log(err);
-  // })
-});
-
-
-
-router.post("/signup", function(req, res) {
-  User.create({
+  User.update({'_id': id},{
     username: req.body.username,
-    password: req.body.password
-  }).then(function(data) {
-    console.log(data);
-    res.redirect("/");
+    name: req.body.name,
+    email: req.body.email,
+    university: req.body.university,
+    job: req.body.job,
+    company: req.body.company,
+    skills: req.body.skills,
+    phone: req.body.phone,
+    address:{
+      street_num: req.body.streetNum,
+      Street_name: req.body.streetName,
+      city: req.body.city,
+      state_or_province: req.body.state,
+      postal_code: req.body.zip,
+      country: req.body.country,
+    }
+  }).then(function(data){
+    console.log("catch");
+    console.log(req.user);
+    res.redirect("/")
   })
   .catch(function(err) {
     console.log(err);
-    res.redirect("/signup");
-  });
+  })
+
+
 });
 
-router.get("/user", requireLogin, function(req, res) {
-  res.render("user", {username: req.user.username});
+router.get("/edit/:id", function(req, res){
+  console.log(req.user);
+
+  if(req.user._id == req.params.id){
+    User.findOne({_id: req.params.id})
+    .then(function(user) {
+      console.log(user);
+      res.render('editprofile', user);
+    })
+    .catch(function(err) {
+      res.send(err);
+    });
+  } else {
+    res.redirect('/view')
+  }
+});
+
+
+router.get("/view", function(req, res) {
+
+  res.render("page");
 });
 
 router.get("/logout", function(req, res) {
   req.logout();
-  res.redirect("/");
+  res.redirect("/login");
 });
 
 

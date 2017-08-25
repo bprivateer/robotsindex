@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   passwordHash: { type: String, required: true },
   name: {type: String},
   email: String,
+  avatar: String,
   university: String,
   job: String,
   comapny: String,
@@ -18,7 +19,7 @@ const userSchema = new mongoose.Schema({
     Street_name: String,
     city: String,
     state_or_province: String,
-    postal_code: Number,
+    postal_code: {type: Number, required: false},
     country: String,
   }
 });
