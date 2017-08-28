@@ -72,6 +72,10 @@ router.get('/index', requireLogin, function(req, res){
   });
 });
 
+router.get("/signup", function(req, res) {
+  res.render("signup");
+});
+
 router.post('/signup', function(req, res){
   User.create({
     username: req.body.username,
@@ -101,10 +105,7 @@ router.post('/signup', function(req, res){
 
 router.get("/", login, function(req, res) {
 
-
-  res.render("index", {
-      messages: res.locals.getMessages()
-  });
+  res.render("index", { messages: res.locals.getMessages()});
 });
 
 router.get('/login', function(req, res){
@@ -118,24 +119,6 @@ router.post('/login', passport.authenticate('local', {
     failureRedirect: '/login',
     failureFlash: true
 }));
-
-router.get("/signup", function(req, res) {
-  res.render("signup");
-});
-
-// router.post("/signup", login, function(req, res) {
-//   User.create({
-//     username: req.body.username,
-//     password: req.body.password
-//   }).then(function(data) {
-//     // console.log(data);
-//     res.redirect("/login");
-//   })
-//   .catch(function(err) {
-//     console.log(err);
-//     res.redirect("/index");
-//   });
-// });
 
 router.post("/edit/:id", function(req, res){
  let id = req.params.id;
@@ -170,8 +153,16 @@ router.post("/edit/:id", function(req, res){
 });
 
 router.get("/edit/:id", function(req, res){
-  console.log(req.user);
+  // console.log(req.user);
 
+  // User.findOne({_id: req.params.id})
+  // .catch(function(user){
+  //   console.log("USERRRRRRR", user);
+  // })
+  // .then(function(err){
+  //   console.log(err);
+  // })
+// let id = req.params.username;
   if(req.user._id == req.params.id){
     User.findOne({_id: req.params.id})
     .then(function(user) {
@@ -182,20 +173,35 @@ router.get("/edit/:id", function(req, res){
       res.send(err);
     });
   } else {
-    res.redirect('/view')
+    res.render('page', {})
   }
-});
-
-
-router.get("/view", function(req, res) {
-
-  res.render("page");
+//   console.log("IIIIIIIDDD",id);
+// res.render("editprofile")
 });
 
 router.get("/logout", function(req, res) {
   req.logout();
   res.redirect("/login");
 });
+//
+//
+router.get("/view/:id", function(req, res) {
+  let id = req.params.id
+
+  User.findOne({_id: req.params.id})
+  .then(function(user){
+    console.log("USER",user);
+    res.render("page", user);
+  })
+  .catch(function(err){
+    console.log(err);
+  })
+  console.log("ID", id);
+  console.log(req.params.id);
+
+});
+
+
 
 
 module.exports = router;
